@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Details!{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+
+    {% if user is defined %}
+
+    <div class="card-group">
+        <div class="card">
+        <img style="width: 30%; height: 30%;" class="card-img-top" src="{{ asset('profile-pictures/' ~ user.image) }}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.name }}</h5>
+            <p class="card-text">{{ user.description }}</p>
+            <p class="card-tet"><a href="{{ path('delete-get', {'id': user.id}) }}">Delete</a> </p>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

@@ -34,7 +34,7 @@ class User
      *
      * @ORM\Column(name="description", type="string", length=255)
      */
-    private $email;
+    private $description;
 
     /**
      * @var string
@@ -81,27 +81,27 @@ class User
     }
 
     /**
-     * Set email
+     * Set description
      *
      * @param string $email
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setDescription($description)
     {
-        $this->email = $email;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get description
      *
      * @return string
      */
-    public function getEmail()
+    public function getDescription()
     {
-        return $this->email;
+        return $this->description;
     }
 
     /**

@@ -8,8 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UserStoriesBundle\Entity\User;
 
@@ -28,8 +28,8 @@ class UserController extends Controller
         $user = new User();
 
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
-            TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('image',
+            TextType::class, ['label' => 'User name'])->add('description', TextType::class,
+            ['label' => 'Description'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -44,8 +44,8 @@ class UserController extends Controller
         $user = new User();
 
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
-            TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('image',
+            TextType::class, ['label' => 'User name'])->add('description', TextType::class,
+            ['label' => 'Description'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -79,16 +79,26 @@ class UserController extends Controller
         $user = $userRepository->find($id);
 
         if ($user) {
-            $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
-                TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-                ['label' => 'E-mail'])->add('image',
-                FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
-                ['label' => 'Create user'])->getForm();
+            $form = $this->createFormBuilder($user)
+                ->setAction($this->generateUrl('new-get'))
+                ->setMethod('GET')->add('name',
+                TextType::class, ['label' => 'User name'])->add('description', TextType::class,
+                ['label' => 'Description'])
+                ->add('image',
+                FileType::class, [
+                    'label' => 'Profile image', 'data_class' => 'Symfony\Component\HttpFoundation\File\File'
+                    ])
+                ->add('create', SubmitType::class,
+                ['label' => 'Create user'])
+                ->getForm();
+
             return $this->render('user-stories/new.html.twig', ['form' => $form->createView()]);
         }
         return new Response("Error");
 
     }
+
+
 
     /**
      * @Route("/modify/{id}", name="modify-post", methods={"POST"})
@@ -97,10 +107,10 @@ class UserController extends Controller
     {
         $userRepository = $this->getDoctrine()->getRepository(User::class);
         $user = $userRepository->find($id);
-
+        $user->setImage(new File($this->getParameter('profile-pictures_directory').'/'.$user->getImage()));
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
-            TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('image',
+            TextType::class, ['label' => 'User name'])->add('description', TextType::class,
+            ['label' => 'Description'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -111,7 +121,7 @@ class UserController extends Controller
             $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
             $file->move($this->getParameter('profile-pictures_directory'), $fileName);
-            $user->setImage($fileName);
+
             $user = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
@@ -140,17 +150,6 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="showUserById", methods={"GET"})
-     */
-    public function showUserByIdAction($id)
-    {
-        $userRepository = $this->getDoctrine()->getRepository(User::class);
-        $user = $userRepository->find($id);
-
-        return new Response("User Data:", ['user' => $user]); // potem w widoku
-    }
-
-    /**
      * @Route("/all", name="allUsers", methods={"GET"})
      */
     public function showAllAction()
@@ -158,6 +157,17 @@ class UserController extends Controller
         $userRepository = $this->getDoctrine()->getRepository(User::class);
         $user = $userRepository->findAll();
 
-        return new Response("All:", ['user' => $user]); // potem w widoku
+        return $this->render("user-stories/list.html.twig", ['user' => $user]);
+    }
+
+    /**
+     * @Route("/{id}", name="showUserById", methods={"GET"})
+     */
+    public function showUserByIdAction($id)
+    {
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->find($id);
+
+        return $this->render("user-stories/details.html.twig", ['user' => $user]);
     }
 }

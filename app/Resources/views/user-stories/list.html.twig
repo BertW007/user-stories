@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %}Details!{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+    {% for user in user %}
+
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.description }}</td>
+            <td><img style="width: 5%; height: 5%;" class="card-img-top" src="{{ asset('profile-pictures/' ~ user.image) }}" alt="Card image cap"></td>
+            <td><a href="{{ path('showUserById', {'id': user.id}) }}">More</a></td>
+        </tr>
+
+    {% endfor %}
+
+{% endblock %}
