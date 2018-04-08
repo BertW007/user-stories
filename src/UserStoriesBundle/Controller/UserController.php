@@ -127,5 +127,26 @@ class UserController extends Controller
     /**
      * @Route("/delete/{id}", name="delete-get", methods={"GET"})
      */
-    
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        return new Response("user removed");
+    }
+
+    /**
+     * @Route("/{id}", name="showUserById", methods={"GET"}
+     */
+    public function showUserByIdAction($id)
+    {
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->find($id);
+
+        return new Response("User Data:", ['user' => $user]); // potem w widoku
+    }
 }
