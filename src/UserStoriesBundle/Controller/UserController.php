@@ -29,7 +29,7 @@ class UserController extends Controller
 
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
             TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('password', PasswordType::class, ['label' => 'Password'])->add('image',
+            ['label' => 'E-mail'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
             TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('password', PasswordType::class, ['label' => 'Password'])->add('image',
+            ['label' => 'E-mail'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -81,7 +81,7 @@ class UserController extends Controller
         if ($user) {
             $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
                 TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-                ['label' => 'E-mail'])->add('password', PasswordType::class, ['label' => 'Password'])->add('image',
+                ['label' => 'E-mail'])->add('image',
                 FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
                 ['label' => 'Create user'])->getForm();
             return $this->render('user-stories/new.html.twig', ['form' => $form->createView()]);
@@ -100,7 +100,7 @@ class UserController extends Controller
 
         $form = $this->createFormBuilder($user)->setAction($this->generateUrl('new-get'))->setMethod('POST')->add('name',
             TextType::class, ['label' => 'User name'])->add('email', TextType::class,
-            ['label' => 'E-mail'])->add('password', PasswordType::class, ['label' => 'Password'])->add('image',
+            ['label' => 'E-mail'])->add('image',
             FileType::class, ['label' => 'Profile image'])->add('create', SubmitType::class,
             ['label' => 'Create user'])->getForm();
 
@@ -140,7 +140,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="showUserById", methods={"GET"}
+     * @Route("/{id}", name="showUserById", methods={"GET"})
      */
     public function showUserByIdAction($id)
     {
