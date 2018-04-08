@@ -149,4 +149,15 @@ class UserController extends Controller
 
         return new Response("User Data:", ['user' => $user]); // potem w widoku
     }
+
+    /**
+     * @Route("/all", name="allUsers", methods={"GET"})
+     */
+    public function showAllAction()
+    {
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepository->findAll();
+
+        return new Response("All:", ['user' => $user]); // potem w widoku
+    }
 }
